@@ -24,7 +24,7 @@ class ProductService {
 
     async getProduuct(groupId) {
         try {
-            const productData = await productModel.find({groupId:groupId});
+            const productData = await productModel.find({ groupId: groupId });
             return productData;
         }
         catch (error) {
@@ -65,7 +65,6 @@ class ProductService {
                 { $set: { deleted: true } },
                 { new: true }
             );
-            console.log(productData);
 
             return productData;
         } catch (error) {
@@ -84,7 +83,24 @@ class ProductService {
             throw error;
         }
     }
-}
+    async getProductByCatogory(groupId, programId, category) {
+        try {
+            const query = { groupId: parseInt(groupId) };
+            if (programId) {
+                query.programId = parseInt(programId);
+            }
+            if (category) {
+                query.category = category;
+            }
+            const data = await productModel.find(query);
+            return data;
+        }
+        catch (error) {
+            console.log("Error Getting Products by Catogary", error.message);
+            throw error;
+        }
 
+    }
+}
 
 module.exports = new ProductService();

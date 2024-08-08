@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const ProductService = require('../services/product.service');
 router.post('/product', async (req, res) => {
-    const { programId,groupId, title, price, description, category, image, rating } = req.body;
+    const { programId, groupId, title, price, description, category, image, rating } = req.body;
     try {
-        const data = await ProductService.createProduct(programId,groupId, title, price, description, category, image, rating);
+        const data = await ProductService.createProduct(programId, groupId, title, price, description, category, image, rating);
         res.json(data);
     }
     catch (error) {
@@ -14,7 +14,7 @@ router.post('/product', async (req, res) => {
 });
 router.get('/product/:groupId', async (req, res) => {
     try {
-        const groupId=req.params.groupId;
+        const groupId = req.params.groupId;
         const product = await ProductService.getProduuct(groupId);
 
         // const product = await ProductService.getProduuct();
@@ -74,6 +74,18 @@ router.get('/product', async (req, res) => {
     catch (error) {
         console.error("Error getting Products", error.message);
         res.status(500).send({ message: "Internal Server error" });
+    }
+});
+router.get('/produacts/data/:groupId', async (req, res) => {
+    try {
+        const groupId = req.params.groupId;
+        const { programId, category } = req.query;
+        const product = await ProductService.getProductByCatogory(groupId, programId, category);
+        res.send(product);
+    }
+    catch (error) {
+        console.log("Error Getting Product", error.message);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 })
 module.exports = router;
